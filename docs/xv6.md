@@ -19,6 +19,14 @@ or if you want to run in current terminal:
 make qemu-nox
 ```
 
+***Tips:***
+
+    use `ctrl+a c` to create a new terminal in qemu
+    use `ctrl+a n` to switch to next terminal
+    use `ctrl+a p` to switch to previous terminal
+    use `ctrl+a x` to close current terminal
+    use `ctrl+alt+g` to release mouse
+
 ## clean generated files:
 ```shell
 make clean
