@@ -17,4 +17,5 @@ void test_getpid(void) {
         write(1, "getpid() passed!\n", 18);
     }
     printf(1, "pid: %d\n", pid);
+    exit();
 }
