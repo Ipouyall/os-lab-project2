@@ -55,6 +55,7 @@ dkms.conf
 .idea/**/dbnavigator.xml
 .idea/**/gradle.xml
 .idea/**/libraries
+.idea
 cmake-build-*/
 .idea/**/mongoSettings.xml
 *.iws
