@@ -2,10 +2,7 @@
 ## installation
 ### install dependencies
 ```shell
-sudo apt install qemu
-```
-```shell
-sudo apt install qemu-install-x86
+sudo apt install qemu qemu-system-x86
 ```
 ### run xv6
 **Attention** make sure you are in codes/xv6 directory
