@@ -21,7 +21,15 @@ int main(int argc, char *argv[]) {
             );
     printf(1, "calling bpf(%d)...\n", n);
     int result = bpf();
-    asm("movl %0, %%ebx" : : "r"(prev_ebx));
+    asm volatile(
+            "movl %0, %%ebx;"
+            : : "r"(prev_ebx)
+            );
+    if (result == -1) {
+        write(1, "bpf() failed!\n", 14);
+        write(1, "please check i you entered an integer bigger than 1\n", 52);
+        exit();
+    }
     printf(1, "biggest_prime_factor(%d) = %d\n", n, result);
     exit();
 }
