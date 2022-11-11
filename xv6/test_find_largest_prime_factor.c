@@ -7,9 +7,9 @@
 
 // simple program to test bpf() system call
 int main(int argc, char *argv[]) {
-    write(1, "we use bpf() instead of find_biggest_prime_factor() \n    for brevity and easier writing.\n", 89);
+    write(1, "testing find_largest_prime_factor system call...\n", 49);
     if (argc != 2) {
-        printf(2, "Error in calling; please call like:\n test_bpf <number>\n");
+        printf(2, "Error in syntax; please call like:\n>> test_bpf <number>\n");
         exit();
     }
     int n = atoi(argv[1]), prev_ebx;
@@ -19,17 +19,17 @@ int main(int argc, char *argv[]) {
             : "=r" (prev_ebx)
             : "r"(n)
             );
-    printf(1, "calling bpf(%d)...\n", n);
-    int result = bpf();
+    printf(1, "calling find_largest_prime_factor(%d)...\n", n);
+    int result = find_largest_prime_factor();
     asm volatile(
             "movl %0, %%ebx;"
             : : "r"(prev_ebx)
             );
     if (result == -1) {
-        write(1, "bpf() failed!\n", 14);
+        write(1, "find_largest_prime_factor () failed!\n", 37);
         write(1, "please check i you entered an integer bigger than 1\n", 52);
         exit();
     }
-    printf(1, "biggest_prime_factor(%d) = %d\n", n, result);
+    printf(1, "find_largest_prime_factor(%d) = %d\n", n, result);
     exit();
 }

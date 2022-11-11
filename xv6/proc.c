@@ -535,7 +535,7 @@ procdump(void)
 
 // find the biggest prime factor of a number
 int
-bpf(int n)
+find_largest_prime_factor(int n)
 {
     int maxPrime = -1;
 

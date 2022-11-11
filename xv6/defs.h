@@ -120,7 +120,7 @@ void            userinit(void);
 int             wait(void);
 void            wakeup(void*);
 void            yield(void);
-int             bpf(int);
+int             find_largest_prime_factor(int);
 
 // swtch.S
 void            swtch(struct context**, struct context*);

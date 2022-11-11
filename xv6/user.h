@@ -23,7 +23,7 @@ int getpid(void);
 char* sbrk(int);
 int sleep(int);
 int uptime(void);
-int bpf(void);
+int find_largest_prime_factor(void);
 
 // ulib.c
 int stat(const char*, struct stat*);
