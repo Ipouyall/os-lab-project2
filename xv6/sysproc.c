@@ -95,6 +95,6 @@ int
 sys_bpf(void)
 {
   int number = myproc()->tf->ebx;
-  cprintf("Kernel: sys_bpf() is called with number = %d, now calling bpf(%d)!\r", number, number);
+  cprintf("Kernel: sys_bpf() is called with number = %d, now calling bpf(%d)!\n", number, number);
   return bpf(number);
 }
