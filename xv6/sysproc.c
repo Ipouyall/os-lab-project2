@@ -94,8 +94,7 @@ sys_uptime(void)
 int
 sys_bpf(void)
 {
-  int n;
-  if(argint(0, &n) < 0)
-    return -1;
-  return bpf(n);
+  int number = myproc()->tf->ebx;
+  cprintf("Kernel: sys_bpf() is called with number = %d, now calling bpf(%d)!\r", number, number);
+  return bpf(number);
 }
