@@ -89,3 +89,13 @@ sys_uptime(void)
   release(&tickslock);
   return xticks;
 }
+
+// SYSCALL to return biggest-prime-factor of a number
+int
+sys_bpf(void)
+{
+  int n;
+  if(argint(0, &n) < 0)
+    return -1;
+  return bpf(n);
+}
