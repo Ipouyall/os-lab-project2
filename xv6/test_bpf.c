@@ -12,9 +12,16 @@ int main(int argc, char *argv[]) {
         printf(2, "Error in calling; please call like:\n test_bpf <number>\n");
         exit();
     }
-    int n = atoi(argv[1]);
+    int n = atoi(argv[1]), prev_ebx;
+    asm volatile(
+            "movl %%ebx, %0;"
+            "movl %1, %%ebx;"
+            : "=r" (prev_ebx)
+            : "r"(n)
+            );
     printf(1, "calling bpf(%d)...\n", n);
-    int result = bpf(n);
-    printf(1, "bpf(%d) = %d\n", n, result);
+    int result = bpf();
+    asm("movl %0, %%ebx" : : "r"(prev_ebx));
+    printf(1, "biggest_prime_factor(%d) = %d\n", n, result);
     exit();
 }
