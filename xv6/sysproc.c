@@ -90,7 +90,7 @@ sys_uptime(void)
   return xticks;
 }
 
-// SYSCALL to return biggest-prime-factor of a number
+// SYSCALL to find the largest prime factor of a number
 int
 sys_find_largest_prime_factor(void)
 {

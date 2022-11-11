@@ -5,7 +5,7 @@
 #include "fcntl.h"
 #include "user.h"
 
-// simple program to test bpf() system call
+// simple program to test find_largest_prime_factor() system call
 int main(int argc, char *argv[]) {
     write(1, "testing find_largest_prime_factor system call...\n", 49);
     if (argc != 2) {

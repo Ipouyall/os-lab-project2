@@ -533,7 +533,7 @@ procdump(void)
   }
 }
 
-// find the biggest prime factor of a number
+// find the largest prime factor of a number
 int
 find_largest_prime_factor(int n)
 {
