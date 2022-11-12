@@ -90,6 +90,12 @@ sys_uptime(void)
   return xticks;
 }
 
+int
+sys_get_parent_pid(void)
+{
+  return get_parent_pid();
+}
+
 // SYSCALL to find the largest prime factor of a number
 int
 sys_find_largest_prime_factor(void)
