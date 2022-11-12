@@ -585,6 +585,7 @@ break_line()
   cprintf("\n");
 }
 
+// find the pid callers of a syscall and order that pids called that syscall
 void
 get_callers(int syscall_number)
 {
