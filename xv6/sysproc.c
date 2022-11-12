@@ -108,5 +108,4 @@ sys_get_callers(void)
   cprintf("Kernel: sys_get_callers(%d) is called\n", number);
   cprintf("        now calling get_callers(%d)\n", number);
   get_callers(number);
-
 }

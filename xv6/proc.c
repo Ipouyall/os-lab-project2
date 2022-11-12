@@ -566,36 +566,32 @@ find_largest_prime_factor(int n)
 }
 
 
-#define NUM_OF_SYSCALLS 5
-#define MAX_PID_NUM_SAVED 10
+#define NUM_OF_SYSCALLS 25
+#define MAX_PID_NUM_SAVED 25
 int nummm = 0;
 int syscalls_pid_stack[NUM_OF_SYSCALLS][MAX_PID_NUM_SAVED];
 
 void
 push_pid_in_stack(int pid,int num)
 {
-    nummm++;
-
+    int i;
+    for (i = 0; syscalls_pid_stack[num][i]!=0; i++)
+      if(syscalls_pid_stack[num][i] == pid) return;
+    syscalls_pid_stack[num][i] = pid;
 }
 
 void
 get_callers(int syscall_number)
 {
-    struct proc *p;
-    struct task_struct *task;
-    //cprintf("%d ",nummm);
-    // for (int i = 0; i < NUM_OF_SYSCALLS; i++)
-    // {
-    //   for (int j = 0; j < MAX_PID_NUM_SAVED; j++)
-    //   {
-    //     cprintf("%d ",syscalls_pid_stack[i][j]);
-    //   }
-    //   cprintf("\n");
-    // }
-    // if (result == -1) {
-    //     write(1, "find_largest_prime_factor () failed!\n", 37);
-    //     write(1, "please check i you entered an integer bigger than 1\n", 52);
-    //     exit();
-    // }
-    // printf(1, "find_largest_prime_factor(%d) = %d\n", n, result);
+    if(syscalls_pid_stack[syscall_number][0] == 0) {
+      cprintf("this syscall not called !!! \n");
+      return;
+    }
+
+    for (int i = 0; syscalls_pid_stack[syscall_number][i] != 0; i++)
+      if (syscalls_pid_stack[syscall_number][i+1] != 0)
+        cprintf("%d , ", syscalls_pid_stack[syscall_number][i]);
+      else
+        cprintf("%d\n", syscalls_pid_stack[syscall_number][i]);
+    
 }
