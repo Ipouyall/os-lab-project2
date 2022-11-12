@@ -575,8 +575,7 @@ void
 push_pid_in_stack(int pid,int num)
 {
     int i;
-    for (i = 0; syscalls_pid_stack[num][i]!=0; i++)
-      if(syscalls_pid_stack[num][i] == pid) return;
+    for (i = 0; syscalls_pid_stack[num][i]!=0; i++) {}
     syscalls_pid_stack[num][i] = pid;
 }
 
@@ -590,7 +589,7 @@ get_callers(int syscall_number)
 
     for (int i = 0; syscalls_pid_stack[syscall_number][i] != 0; i++)
       if (syscalls_pid_stack[syscall_number][i+1] != 0)
-        cprintf("%d , ", syscalls_pid_stack[syscall_number][i]);
+        cprintf("%d,", syscalls_pid_stack[syscall_number][i]);
       else
         cprintf("%d\n", syscalls_pid_stack[syscall_number][i]);
     
