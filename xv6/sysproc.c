@@ -101,9 +101,12 @@ sys_find_largest_prime_factor(void)
 }
 
 // SYSCALL to get callers pids
-int
+void
 sys_get_callers(void)
 {
-  //
-  
+  int number = myproc()->tf->ebx;
+  cprintf("Kernel: sys_get_callers(%d) is called\n", number);
+  cprintf("        now calling get_callers(%d)\n", number);
+  get_callers(number);
+
 }
