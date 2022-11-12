@@ -6,21 +6,18 @@
 #include "user.h"
 #include "syscall.h"
 
+void call_tests(int sys_call) {
+    printf(1, "calling get_callers for %d\n", sys_call);
+    get_callers(sys_call);
+}
+
 // simple program to test get_callers() system call
 int main(int argc, char *argv[]) {
     printf(1, "testing get_callers system call\n");
-    
-    int sys_fork = SYS_fork;
-    printf(1, "calling get_callers for SYS_fork\n", sys_fork);
-    get_callers(sys_fork);
 
-    int sys_wait = SYS_wait;
-    printf(1, "calling get_callers SYS_wait\n", sys_wait);
-    get_callers(sys_wait);
-
-    int sys_write = SYS_write;
-    printf(1, "calling get_callers SYS_write\n", sys_write);
-    get_callers(sys_write);
+    call_tests(SYS_fork);
+    call_tests(SYS_wait);
+    call_tests(SYS_write);
 
     exit();
 }

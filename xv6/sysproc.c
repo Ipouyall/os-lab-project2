@@ -90,13 +90,19 @@ sys_uptime(void)
   return xticks;
 }
 
+void 
+call_syscall_func_message(char* func_name,int number)
+{
+  cprintf("Kernel: sys_%s(%d) is called\n", func_name, number);
+  cprintf("        now calling %s(%d)\n", func_name, number);
+}
+
 // SYSCALL to find the largest prime factor of a number
 int
 sys_find_largest_prime_factor(void)
 {
   int number = myproc()->tf->ebx;
-  cprintf("Kernel: sys_find_largest_prime_factor(%d) is called\n", number);
-  cprintf("        now calling find_largest_prime_factor(%d)\n", number);
+  call_syscall_func_message("find_largest_prime_factor", number);
   return find_largest_prime_factor(number);
 }
 
@@ -106,7 +112,6 @@ sys_get_callers(void)
 {
   int number;
   argint(0, &number);
-  cprintf("Kernel: sys_get_callers(%d) is called\n", number);
-  cprintf("        now calling get_callers(%d)\n", number);
+  call_syscall_func_message("get_callers", number);
   get_callers(number);
 }

@@ -566,11 +566,6 @@ find_largest_prime_factor(int n)
 }
 
 
-#define NUM_OF_SYSCALLS 25
-#define MAX_PID_NUM_SAVED 1000
-#define MAX_PID_TRACED 1000
-#define MAX_PID_OUTPUT_IN_ONE_LINE 11
-int nummm = 0;
 int syscalls_pid_stack[NUM_OF_SYSCALLS][MAX_PID_NUM_SAVED];
 int syscalls_order_pid_stack[NUM_OF_SYSCALLS][MAX_PID_NUM_SAVED];
 int pid_num_of_calls[MAX_PID_TRACED];
@@ -585,19 +580,30 @@ push_pid_in_stack(int pid,int num)
 }
 
 void
+break_line()
+{
+  cprintf("\n");
+}
+
+void
 get_callers(int syscall_number)
 {
     if(syscalls_pid_stack[syscall_number][0] == 0) {
       cprintf("this syscall not called !!! \n");
       return;
     }
+
     cprintf("pid : order that pid called this syscall\n");
-    for (int i = 0; syscalls_pid_stack[syscall_number][i] != 0; i++){
-      if(i%MAX_PID_OUTPUT_IN_ONE_LINE == 0) cprintf("\n");
+    for (int i = 0; syscalls_pid_stack[syscall_number][i] != 0; i++) {
+
+      if(i%MAX_PID_OUTPUT_IN_ONE_LINE == 0) break_line();
+      
       if (syscalls_pid_stack[syscall_number][i+1] != 0)
-        cprintf("%d:%d ,", syscalls_pid_stack[syscall_number][i],syscalls_order_pid_stack[syscall_number][i]);
+        cprintf("%d:%d ,", syscalls_pid_stack[syscall_number][i],
+                           syscalls_order_pid_stack[syscall_number][i]);
       else
-        cprintf("%d:%d\n", syscalls_pid_stack[syscall_number][i],syscalls_order_pid_stack[syscall_number][i]);
+        cprintf("%d:%d\n", syscalls_pid_stack[syscall_number][i],
+                           syscalls_order_pid_stack[syscall_number][i]);
     }
     
 }
