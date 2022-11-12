@@ -532,3 +532,11 @@ procdump(void)
     cprintf("\n");
   }
 }
+
+
+// return parents's pid
+int 
+get_parent_pid() {
+  struct proc *p = myproc()->parent;
+  return p->pid;
+}
