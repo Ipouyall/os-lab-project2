@@ -99,3 +99,11 @@ sys_find_largest_prime_factor(void)
   cprintf("        now calling find_largest_prime_factor(%d)\n", number);
   return find_largest_prime_factor(number);
 }
+
+// SYSCALL to get callers pids
+int
+sys_get_callers(void)
+{
+  //
+  
+}

@@ -564,3 +564,9 @@ find_largest_prime_factor(int n)
 
     return maxPrime;
 }
+
+void
+get_callers(int syscall_number)
+{
+  
+}
