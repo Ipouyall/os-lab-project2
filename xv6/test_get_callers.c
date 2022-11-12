@@ -9,6 +9,7 @@
 // simple program to test get_callers() system call
 int main(int argc, char *argv[]) {
     printf(1, "testing get_callers system call\n");
+    
     int sys_fork = SYS_fork;
     printf(1, "calling get_callers for SYS_fork\n", sys_fork);
     get_callers(sys_fork);

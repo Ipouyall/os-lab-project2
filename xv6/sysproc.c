@@ -104,7 +104,9 @@ sys_find_largest_prime_factor(void)
 void
 sys_get_callers(void)
 {
-  int id;
-  argint(0, &id);
-  get_callers(id);
+  int number;
+  argint(0, &number);
+  cprintf("Kernel: sys_get_callers(%d) is called\n", number);
+  cprintf("        now calling get_callers(%d)\n", number);
+  get_callers(number);
 }
