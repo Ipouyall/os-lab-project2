@@ -1,13 +1,13 @@
 //
-// Created by ata on 11/11/22.
+// Created by ata on 12/11/22.
 //
 #include "types.h"
 #include "fcntl.h"
 #include "user.h"
 
-// simple program to test find_largest_prime_factor() system call
+// simple program to test get_callers() system call
 int main(int argc, char *argv[]) {
-    write(1, "testing get_callers system call...\n", 49);
+    printf(1, "testing get_callers system call...\n", 49);
     if (argc != 2) {
         printf(2, "Error in syntax; please call like:\n>> test_bpf <number>\n");
         exit();

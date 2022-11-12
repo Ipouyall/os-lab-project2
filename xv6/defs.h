@@ -121,6 +121,7 @@ int             wait(void);
 void            wakeup(void*);
 void            yield(void);
 int             find_largest_prime_factor(int);
+void            push_pid_in_stack(int,int);
 void            get_callers(int);
 
 // swtch.S

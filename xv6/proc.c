@@ -564,15 +564,34 @@ find_largest_prime_factor(int n)
 
     return maxPrime;
 }
+
+
+#define NUM_OF_SYSCALLS 5
+#define MAX_PID_NUM_SAVED 10
+int nummm = 0;
+int syscalls_pid_stack[NUM_OF_SYSCALLS][MAX_PID_NUM_SAVED];
+
+void
+push_pid_in_stack(int pid,int num)
+{
+    nummm++;
+
+}
+
 void
 get_callers(int syscall_number)
 {
     struct proc *p;
     struct task_struct *task;
-    cprintf("Acquiring... cnt =\n");
-    for(p = ptable.proc; p < &ptable.proc[NPROC]; p++){ 
-      if (p-> == UNUSED)
-        continue;
+    //cprintf("%d ",nummm);
+    // for (int i = 0; i < NUM_OF_SYSCALLS; i++)
+    // {
+    //   for (int j = 0; j < MAX_PID_NUM_SAVED; j++)
+    //   {
+    //     cprintf("%d ",syscalls_pid_stack[i][j]);
+    //   }
+    //   cprintf("\n");
+    // }
     // if (result == -1) {
     //     write(1, "find_largest_prime_factor () failed!\n", 37);
     //     write(1, "please check i you entered an integer bigger than 1\n", 52);
