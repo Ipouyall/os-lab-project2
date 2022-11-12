@@ -120,6 +120,7 @@ void            userinit(void);
 int             wait(void);
 void            wakeup(void*);
 void            yield(void);
+int             find_largest_prime_factor(int);
 int             get_parent_pid();
 
 // swtch.S

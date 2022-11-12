@@ -95,3 +95,13 @@ sys_get_parent_pid(void)
 {
   return get_parent_pid();
 }
+
+// SYSCALL to find the largest prime factor of a number
+int
+sys_find_largest_prime_factor(void)
+{
+  int number = myproc()->tf->ebx;
+  cprintf("Kernel: sys_find_largest_prime_factor(%d) is called\n", number);
+  cprintf("        now calling find_largest_prime_factor(%d)\n", number);
+  return find_largest_prime_factor(number);
+}
