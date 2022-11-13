@@ -155,3 +155,29 @@ filewrite(struct file *f, char *addr, int n)
   panic("filewrite");
 }
 
+// this function, if file exists in path,
+// will decrease its size to length by cutting off the end of the file
+// or increase its size to length by adding 0s to the end of the file
+int update_file_size(const char* path, int length){
+    struct inode* ip;
+    if((ip = namei(path)) == 0){
+        return -1;
+    }
+    ilock(ip);
+    if(ip->type == T_DIR){
+        iunlockput(ip);
+        return -1;
+    }
+    if(ip->size > length){
+        ip->size = length;
+        iupdate(ip);
+    }
+    else if(ip->size < length){
+        char* buf = kalloc();
+        memset(buf, 0, length - ip->size);
+        writei(ip, buf, ip->size, length - ip->size);
+        kfree(buf);
+    }
+    iunlockput(ip);
+    return 0;
+}
