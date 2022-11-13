@@ -9,6 +9,7 @@
 #include "spinlock.h"
 #include "sleeplock.h"
 #include "file.h"
+#include "stat.h"
 
 struct devsw devsw[NDEV];
 struct {
@@ -155,3 +156,66 @@ filewrite(struct file *f, char *addr, int n)
   panic("filewrite");
 }
 
+int file_inode_exists(char *path)
+{
+    struct inode *ip;
+    ip = namei(path);
+    if(ip == 0){
+        cprintf("file error: file not found\n");
+        return 0;
+    }
+    switch (ip->type) {
+        case T_FILE:
+            return 1;
+        case T_DIR:
+            cprintf("file error: file is a directory\n");
+            return 0;
+        case T_DEV:
+            cprintf("file error: file is a device\n");
+            return 0;
+        default:
+            cprintf("file error: file is of unknown type\n");
+            return 0;
+    }
+}
+
+// this function, if file exists in path,
+// will decrease its size to length by cutting off the end of the file
+// or increase its size to length by adding 0s to the end of the file
+int change_file_size(const char* path, int length) {
+    if (length < 0) {
+        cprintf("change_file_size: length is negative\n");
+        return -1;
+    }
+
+    if (file_inode_exists(path) == 0) {
+        return -1;
+    }
+
+    begin_op();
+    struct inode *ip;
+    ip = namei(path);
+    ilock(ip);
+
+    if (ip->size < length) {
+        // increase file size
+        int old_size = ip->size;
+        char* buf = kalloc();
+        memset(buf, 0, BSIZE);
+        for (int i = old_size; i < length; i += BSIZE) {
+            int n = length - i;
+            n = n > BSIZE ? BSIZE : n;
+            writei(ip, buf, i, n);
+        }
+        ip->size = length;
+        iupdate(ip);
+    }
+    else if (ip->size > length) {
+        // decrease file size
+        ip->size = length;
+        iupdate(ip);
+    }
+    iunlock(ip);
+    end_op();
+    return 0;
+}
