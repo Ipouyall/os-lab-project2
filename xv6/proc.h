@@ -57,7 +57,7 @@ struct proc {
 //   fixed-size stack
 //   expandable heap
 
-#define NUM_OF_SYSCALLS 25
+#define NUM_OF_SYSCALLS 50
 #define MAX_PID_NUM_SAVED 1000
 #define MAX_PID_TRACED 1000
 #define MAX_PID_OUTPUT_IN_ONE_LINE 11
