@@ -162,11 +162,13 @@ filewrite(struct file *f, char *addr, int n)
 int change_file_size(const char* path, int length){
     struct inode* ip;
     if((ip = namei(path)) == 0){
+        cprintf("change_file_size: file does not exist\n");
         return -1;
     }
     ilock(ip);
     if(ip->type == T_DIR){
         iunlockput(ip);
+        cprintf("change_file_size: file is a directory\n");
         return -1;
     }
     if(ip->size > length){
@@ -180,5 +182,6 @@ int change_file_size(const char* path, int length){
         kfree(buf);
     }
     iunlockput(ip);
+    cprintf("change_file_size: file size changed to %d\n", length);
     return 0;
 }
