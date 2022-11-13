@@ -571,3 +571,43 @@ find_largest_prime_factor(int n)
 
     return maxPrime;
 }
+
+
+int syscalls_pid_stack[NUM_OF_SYSCALLS][MAX_PID_NUM_SAVED];
+int syscalls_order_pid_stack[NUM_OF_SYSCALLS][MAX_PID_NUM_SAVED];
+int pid_num_of_calls[MAX_PID_TRACED];
+
+void
+push_pid_in_stack(int pid,int num)
+{
+    int i;
+    for (i = 0; syscalls_pid_stack[num][i]!=0; i++) {}
+    syscalls_pid_stack[num][i] = pid;
+    syscalls_order_pid_stack[num][i] = ++pid_num_of_calls[pid];
+}
+
+
+// find the pid callers of a syscall and order that pids called that syscall
+void
+get_callers(int syscall_number)
+{
+    if(syscalls_pid_stack[syscall_number][0] == 0) {
+      cprintf("this syscall is not called yet!!!\n");
+      return;
+    }
+
+    cprintf("pid: order that pid called this syscall\n");
+    for (int i = 0; syscalls_pid_stack[syscall_number][i] != 0; i++) {
+
+      if(i%MAX_PID_OUTPUT_IN_ONE_LINE == 0) cprintf("\n");
+      
+      if (syscalls_pid_stack[syscall_number][i+1] != 0)
+        cprintf("%d:%d ,", syscalls_pid_stack[syscall_number][i],
+                           syscalls_order_pid_stack[syscall_number][i]);
+      else
+        cprintf("%d:%d\n", syscalls_pid_stack[syscall_number][i],
+                           syscalls_order_pid_stack[syscall_number][i]);
+    }
+    
+}
+

@@ -104,6 +104,8 @@ extern int sys_wait(void);
 extern int sys_write(void);
 extern int sys_uptime(void);
 extern int sys_find_largest_prime_factor(void);
+extern int sys_get_callers(void);
+
 extern int sys_get_parent_pid(void);
 
 
@@ -130,6 +132,8 @@ static int (*syscalls[])(void) = {
 [SYS_mkdir]                     sys_mkdir,
 [SYS_close]                     sys_close,
 [SYS_find_largest_prime_factor] sys_find_largest_prime_factor,
+[SYS_get_callers]               sys_get_callers,
+
 [SYS_get_parent_pid]            sys_get_parent_pid,
 };
 
@@ -141,6 +145,7 @@ syscall(void)
 
   num = curproc->tf->eax;
   if(num > 0 && num < NELEM(syscalls) && syscalls[num]) {
+    push_pid_in_stack(curproc->pid, num);
     curproc->tf->eax = syscalls[num]();
   } else {
     cprintf("%d %s: unknown sys call %d\n",

@@ -30,4 +30,6 @@ SYSCALL(sbrk)
 SYSCALL(sleep)
 SYSCALL(uptime)
 SYSCALL(find_largest_prime_factor)
+SYSCALL(get_callers)
+
 SYSCALL(get_parent_pid)
