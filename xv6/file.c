@@ -156,11 +156,10 @@ filewrite(struct file *f, char *addr, int n)
   panic("filewrite");
 }
 
-int is_file_errors(char *path)
+int file_inode_exists(char *path)
 {
     struct inode *ip;
-    char name[DIRSIZ];
-    ip = namex(path, 1, name);
+    ip = namei(path);
     if(ip == 0){
         cprintf("file error: file not found\n");
         return 0;
@@ -190,7 +189,7 @@ int change_file_size(const char* path, int length) {
     }
 
     begin_op();
-    if (is_file_errors(path) == 0) {
+    if (file_inode_exists(path) == 0) {
         end_op();
         return -1;
     }
@@ -205,23 +204,22 @@ int change_file_size(const char* path, int length) {
         ip->size = length;
         iupdate(ip);
         iunlockput(ip);
-        end_op();
         if (writei(ip, (char *) 0, old_size, length - old_size) != length - old_size) {
+            end_op();
             cprintf("change_file_size: writei failed\n");
             return -1;
         }
-        return 0;
     }
-    if (ip->size > length) {
+    else if (ip->size > length) {
         // decrease file size
         ip->size = length;
         iupdate(ip);
         iunlockput(ip);
-        end_op();
-        return 0;
     }
+    else{
     // file size is already as required
     iunlockput(ip);
+    }
     end_op();
     return 0;
 }
