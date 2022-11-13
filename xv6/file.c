@@ -9,6 +9,7 @@
 #include "spinlock.h"
 #include "sleeplock.h"
 #include "file.h"
+#include "stat.h"
 
 struct devsw devsw[NDEV];
 struct {
@@ -158,7 +159,7 @@ filewrite(struct file *f, char *addr, int n)
 // this function, if file exists in path,
 // will decrease its size to length by cutting off the end of the file
 // or increase its size to length by adding 0s to the end of the file
-int update_file_size(const char* path, int length){
+int change_file_size(const char* path, int length){
     struct inode* ip;
     if((ip = namei(path)) == 0){
         return -1;

@@ -451,5 +451,5 @@ sys_change_file_size(void){
     if(argstr(0, &path) < 0 || argint(1, &length) < 0){
         return -1;
     }
-    return update_file_size(path, length);
+    return change_file_size(path, length);
 }
