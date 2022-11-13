@@ -156,48 +156,72 @@ filewrite(struct file *f, char *addr, int n)
   panic("filewrite");
 }
 
+int is_file_errors(char *path)
+{
+    struct inode *ip;
+    char name[DIRSIZ];
+    ip = namex(path, 1, name);
+    if(ip == 0){
+        cprintf("file error: file not found\n");
+        return 0;
+    }
+    switch (ip->type) {
+        case T_FILE:
+            return 1;
+        case T_DIR:
+            cprintf("file error: file is a directory\n");
+            return 0;
+        case T_DEV:
+            cprintf("file error: file is a device\n");
+            return 0;
+        default:
+            cprintf("file error: file is of unknown type\n");
+            return 0;
+    }
+}
+
 // this function, if file exists in path,
 // will decrease its size to length by cutting off the end of the file
 // or increase its size to length by adding 0s to the end of the file
-int change_file_size(const char* path, int length){
-    struct inode* ip;
-    begin_op();
-    if((ip = namei(path)) == 0){
-        cprintf("change_file_size: file does not exist\n");
-        end_op();
-        return -1;
-    }
-    ilock(ip);
-    if(ip->type != T_FILE){
-        cprintf("change_file_size: file is not a regular file\n");
-        iunlock(ip);
-        end_op();
-        return -1;
-    }
-    if(length < 0){
+int change_file_size(const char* path, int length) {
+    if (length < 0) {
         cprintf("change_file_size: length is negative\n");
-        iunlock(ip);
+        return -1;
+    }
+
+    begin_op();
+    if (is_file_errors(path) == 0) {
         end_op();
         return -1;
     }
-    if(ip->type == T_DIR){
-        iunlockput(ip);
-        cprintf("change_file_size: file is a directory\n");
-        end_op();
-        return -1;
-    }
-    if(ip->size > length){
+
+    struct inode *ip;
+    ip = namei(path);
+    ilock(ip);
+
+    if (ip->size < length) {
+        // increase file size
+        int old_size = ip->size;
         ip->size = length;
         iupdate(ip);
+        iunlockput(ip);
+        end_op();
+        if (writei(ip, (char *) 0, old_size, length - old_size) != length - old_size) {
+            cprintf("change_file_size: writei failed\n");
+            return -1;
+        }
+        return 0;
     }
-    else if(ip->size < length){
-        char* buf = kalloc();
-        memset(buf, 0, length - ip->size);
-        writei(ip, buf, ip->size, length - ip->size);
-        kfree(buf);
+    if (ip->size > length) {
+        // decrease file size
+        ip->size = length;
+        iupdate(ip);
+        iunlockput(ip);
+        end_op();
+        return 0;
     }
+    // file size is already as required
     iunlockput(ip);
-    cprintf("change_file_size: file size changed to %d\n", length);
     end_op();
     return 0;
 }

@@ -12,5 +12,5 @@ main(int argc, char *argv[]) {
         exit();
     }
     change_file_size(argv[1], atoi(argv[2]));
-
+    exit();
 }
