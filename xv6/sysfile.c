@@ -447,15 +447,15 @@ sys_pipe(void)
 // this function, if file exists in path,
 // will decrease its size to length by cutting off the end of the file
 // or increase its size to length by adding 0s to the end of the file
-void update_file_size(const char* path, int length){
+int update_file_size(const char* path, int length){
     struct inode* ip;
     if((ip = namei(path)) == 0){
-        return;
+        return -1;
     }
     ilock(ip);
     if(ip->type == T_DIR){
         iunlockput(ip);
-        return;
+        return -1;
     }
     if(ip->size > length){
         ip->size = length;
@@ -468,13 +468,14 @@ void update_file_size(const char* path, int length){
         kfree(buf);
     }
     iunlockput(ip);
+    return 0;
 }
 
-void sys_change_file_size(void){
+int sys_change_file_size(void){
     char* path;
     int length;
     if(argstr(0, &path) < 0 || argint(1, &length) < 0){
-        return;
+        return -1;
     }
-    update_file_size(path, length);
+    return update_file_size(path, length);
 }
