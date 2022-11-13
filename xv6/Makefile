@@ -259,9 +259,9 @@ qemu-nox-gdb: fs.img xv6.img .gdbinit
 EXTRA=\
 	mkfs.c ulib.c user.h cat.c echo.c forktest.c grep.c kill.c\
 	ln.c ls.c mkdir.c rm.c stressfs.c usertests.c wc.c zombie.c\
-	printf.c umalloc.c prime_numbers.c test_getpid.c test_find_largest_prime_factor.c\
-	test_get_callers.c test_get_parent_pid.c\
-  README dot-bochsrc *.pl toc.* runoff runoff1 runoff.list\
+	printf.c umalloc.c prime_numbers.c test_getpid.c test_get_parent_pid.c\
+	test_find_largest_prime_factor.c test_get_callers.c\
+    README dot-bochsrc *.pl toc.* runoff runoff1 runoff.list\
 	.gdbinit.tmpl gdbutil\
 
 dist:
