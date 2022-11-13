@@ -371,7 +371,7 @@ void sys_change_file_size(void){
     return -1;
   }
   iunlock(ip);
-  end_op();
+  // end_op();
   cprintf("test 3\n");
   f->type = FD_INODE;
   f->ip = ip;
@@ -406,7 +406,7 @@ void sys_change_file_size(void){
   char name[DIRSIZ];
   uint off;
 
-  begin_op();
+  // begin_op();
   if((dp = nameiparent(path, name)) == 0){
     end_op();
     return -1;
@@ -432,7 +432,7 @@ void sys_change_file_size(void){
   iupdate(ip);
   iunlockput(ip);
 
-  end_op();
+  // end_op();
 
 
 
@@ -461,7 +461,7 @@ void sys_change_file_size(void){
 
 
   omode=O_WRONLY|O_CREATE;
-  begin_op();
+  // begin_op();
   cprintf("test 1\n");
   if(omode & O_CREATE){
     ip = create(path, T_FILE, 0, 0);
@@ -490,7 +490,7 @@ void sys_change_file_size(void){
     return -1;
   }
   iunlock(ip);
-  end_op();
+  // end_op();
   cprintf("test 3\n");
   f->type = FD_INODE;
   f->ip = ip;
@@ -508,6 +508,8 @@ void sys_change_file_size(void){
   cprintf(path);
   cprintf("\n");
   cprintf(result);
+
+  end_op();
   // cprintf(p);
 
 }
