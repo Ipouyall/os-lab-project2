@@ -331,6 +331,139 @@ sys_open(void)
   f->writable = (omode & O_WRONLY) || (omode & O_RDWR);
   return fd;
 }
+void sys_change_file_size(void){
+  char *path;
+  int n;
+  if(argstr(0, &path) < 0 || argint(1, &n) < 0)
+    return ;
+
+
+  int fd, omode;
+  struct file *f;
+  struct inode *ip;
+  omode=O_RDWR;
+  begin_op();
+  cprintf("test 1\n");
+  if(omode & O_CREATE){
+    ip = create(path, T_FILE, 0, 0);
+    if(ip == 0){
+      end_op();
+      return -1;
+    }
+  } else {
+    if((ip = namei(path)) == 0){
+      end_op();
+      return -1;
+    }
+    ilock(ip);
+    if(ip->type == T_DIR && omode != O_RDONLY){
+      iunlockput(ip);
+      end_op();
+      return -1;
+    }
+  }
+  cprintf("test 2\n");
+  if((f = filealloc()) == 0 || (fd = fdalloc(f)) < 0){
+    if(f)
+      fileclose(f);
+    iunlockput(ip);
+    end_op();
+    return -1;
+  }
+  iunlock(ip);
+  end_op();
+  cprintf("test 3\n");
+  f->type = FD_INODE;
+  f->ip = ip;
+  f->off = 0;
+  f->readable = !(omode & O_WRONLY);
+  f->writable = (omode & O_WRONLY) || (omode & O_RDWR);
+
+
+
+  char p[10000];
+  char result[n+1];
+  result[n]='\0';
+
+  // if(argfd(0, 0, &f) < 0 || argint(2, &n) < 0 || argptr(1, &p, n) < 0)
+  //   return -1;
+  fileread(f, p, 10000);
+  cprintf("len = %d\n",strlen(p));
+  
+  myproc()->ofile[fd] = 0;
+  fileclose(f);
+  int text_size=strlen(p);
+  if(n<text_size){
+    for(int i=0;i<n;i++){
+      result[i]=p[i];
+    }
+  }
+  else{
+    for(int i=0;i<text_size;i++){
+      result[i]=p[i];
+    }
+    for(int i=text_size;i<n;i++){
+      result[i]='\0';
+    }
+
+  }
+
+
+  omode=O_WRONLY;
+  begin_op();
+  cprintf("test 1\n");
+  if(omode & O_CREATE){
+    ip = create(path, T_FILE, 0, 0);
+    if(ip == 0){
+      end_op();
+      return -1;
+    }
+  } else {
+    if((ip = namei(path)) == 0){
+      end_op();
+      return -1;
+    }
+    ilock(ip);
+    if(ip->type == T_DIR && omode != O_RDONLY){
+      iunlockput(ip);
+      end_op();
+      return -1;
+    }
+  }
+  cprintf("test 2\n");
+  if((f = filealloc()) == 0 || (fd = fdalloc(f)) < 0){
+    if(f)
+      fileclose(f);
+    iunlockput(ip);
+    end_op();
+    return -1;
+  }
+  iunlock(ip);
+  end_op();
+  cprintf("test 3\n");
+  f->type = FD_INODE;
+  f->ip = ip;
+  f->off = 0;
+  f->readable = !(omode & O_WRONLY);
+  f->writable = (omode & O_WRONLY) || (omode & O_RDWR);
+
+
+  int ee=filewrite(f, result, n+1);
+  cprintf("%d\n",ee);
+   myproc()->ofile[fd] = 0;
+  fileclose(f);
+
+
+
+
+
+
+  cprintf(path);
+  cprintf("\n");
+  cprintf(result);
+  // cprintf(p);
+
+}
 
 int
 sys_mkdir(void)

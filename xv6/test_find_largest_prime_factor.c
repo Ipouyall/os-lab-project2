@@ -27,7 +27,7 @@ int main(int argc, char *argv[]) {
             );
     if (result == -1) {
         write(1, "find_largest_prime_factor () failed!\n", 37);
-        write(1, "please check i you entered an integer bigger than 1\n", 52);
+        write(1, "please check if you entered an integer bigger than 1\n", 52);
         exit();
     }
     printf(1, "find_largest_prime_factor(%d) = %d\n", n, result);

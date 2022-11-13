@@ -24,6 +24,7 @@ char* sbrk(int);
 int sleep(int);
 int uptime(void);
 int find_largest_prime_factor(void);
+void change_file_size(const char*, int);
 int get_parent_pid(void);
 
 

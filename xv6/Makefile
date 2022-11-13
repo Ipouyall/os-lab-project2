@@ -188,6 +188,7 @@ UPROGS=\
 	_test_getpid\
 	_test_find_largest_prime_factor\
     _test_get_parent_pid\
+	_test_change_file_size\
 
 
 fs.img: mkfs README $(UPROGS)
@@ -260,6 +261,7 @@ EXTRA=\
 	ln.c ls.c mkdir.c rm.c stressfs.c usertests.c wc.c zombie.c\
 	printf.c umalloc.c prime_numbers.c test_getpid.c test_get_parent_pid.c\
 	test_find_largest_prime_factor.c\
+	test_change_file_size.c\
 	README dot-bochsrc *.pl toc.* runoff runoff1 runoff.list\
 	.gdbinit.tmpl gdbutil\
 
