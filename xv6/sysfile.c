@@ -383,7 +383,6 @@ void sys_change_file_size(void){
 
   char p[10000];
   char result[n+1];
-  result[n]='\0';
 
   // if(argfd(0, 0, &f) < 0 || argint(2, &n) < 0 || argptr(1, &p, n) < 0)
   //   return -1;
@@ -392,11 +391,61 @@ void sys_change_file_size(void){
   
   myproc()->ofile[fd] = 0;
   fileclose(f);
+
+
+
+
+
+
+
+
+
+
+  struct inode *dp;
+  struct dirent de;
+  char name[DIRSIZ];
+  uint off;
+
+  begin_op();
+  if((dp = nameiparent(path, name)) == 0){
+    end_op();
+    return -1;
+  }
+
+  ilock(dp);
+  ip = dirlookup(dp, name, &off);
+  ilock(ip);
+
+  if(ip->nlink < 1)
+    panic("unlink: nlink < 1");
+
+  memset(&de, 0, sizeof(de));
+  if(writei(dp, (char*)&de, off, sizeof(de)) != sizeof(de))
+    panic("unlink: writei");
+  if(ip->type == T_DIR){
+    dp->nlink--;
+    iupdate(dp);
+  }
+  iunlockput(dp);
+
+  ip->nlink--;
+  iupdate(ip);
+  iunlockput(ip);
+
+  end_op();
+
+
+
+
+
+
+
   int text_size=strlen(p);
   if(n<text_size){
     for(int i=0;i<n;i++){
       result[i]=p[i];
     }
+     result[n]='\0';
   }
   else{
     for(int i=0;i<text_size;i++){
@@ -405,11 +454,13 @@ void sys_change_file_size(void){
     for(int i=text_size;i<n;i++){
       result[i]='\0';
     }
+    result[n]='\0';
 
   }
 
 
-  omode=O_WRONLY;
+
+  omode=O_WRONLY|O_CREATE;
   begin_op();
   cprintf("test 1\n");
   if(omode & O_CREATE){
@@ -448,14 +499,10 @@ void sys_change_file_size(void){
   f->writable = (omode & O_WRONLY) || (omode & O_RDWR);
 
 
-  int ee=filewrite(f, result, n+1);
+  int ee=filewrite(f, result, n);
   cprintf("%d\n",ee);
    myproc()->ofile[fd] = 0;
   fileclose(f);
-
-
-
-
 
 
   cprintf(path);
