@@ -105,7 +105,7 @@ extern int sys_write(void);
 extern int sys_uptime(void);
 extern int sys_find_largest_prime_factor(void);
 extern int sys_get_callers(void);
-extern void sys_change_file_size(void);
+extern int sys_change_file_size(void);
 extern int sys_get_parent_pid(void);
 
 

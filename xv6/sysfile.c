@@ -448,8 +448,10 @@ int
 sys_change_file_size(void){
     char* path;
     int length;
+    cprintf("kernel: called sys_change_file_size\n");
     if(argstr(0, &path) < 0 || argint(1, &length) < 0){
         return -1;
     }
+    cprintf("        calling change_file_size(%s, %d)\n", path, length);
     return change_file_size(path, length);
 }
