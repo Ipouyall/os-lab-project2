@@ -533,6 +533,13 @@ procdump(void)
   }
 }
 
+// return parents's pid
+int 
+get_parent_pid() {
+  struct proc *p = myproc()->parent;
+  return p->pid;
+}
+
 // find the largest prime factor of a number
 int
 find_largest_prime_factor(int n)
@@ -603,3 +610,4 @@ get_callers(int syscall_number)
     }
     
 }
+
