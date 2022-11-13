@@ -188,12 +188,11 @@ int change_file_size(const char* path, int length) {
         return -1;
     }
 
-    begin_op();
     if (file_inode_exists(path) == 0) {
-        end_op();
         return -1;
     }
 
+    begin_op();
     struct inode *ip;
     ip = namei(path);
     ilock(ip);
@@ -201,25 +200,22 @@ int change_file_size(const char* path, int length) {
     if (ip->size < length) {
         // increase file size
         int old_size = ip->size;
+        char* buf = kalloc();
+        memset(buf, 0, BSIZE);
+        for (int i = old_size; i < length; i += BSIZE) {
+            int n = length - i;
+            n = n > BSIZE ? BSIZE : n;
+            writei(ip, buf, i, n);
+        }
         ip->size = length;
         iupdate(ip);
-        iunlockput(ip);
-        if (writei(ip, (char *) 0, old_size, length - old_size) != length - old_size) {
-            end_op();
-            cprintf("change_file_size: writei failed\n");
-            return -1;
-        }
     }
     else if (ip->size > length) {
         // decrease file size
         ip->size = length;
         iupdate(ip);
-        iunlockput(ip);
     }
-    else{
-    // file size is already as required
-    iunlockput(ip);
-    }
+    iunlock(ip);
     end_op();
     return 0;
 }
